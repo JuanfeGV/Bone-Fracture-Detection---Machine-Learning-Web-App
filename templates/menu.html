@@ -30,30 +30,32 @@
             <h2>Fase 1 — Entendimiento del negocio</h2>
 
             <p>
-              En esta fase se define con claridad el problema clínico y los objetivos del proyecto.
-              El propósito esencial es entender cómo el sistema apoyará el diagnóstico de fracturas y qué
-              beneficios espera obtener el usuario (radiólogos, médicos generales, centros de atención).
+              En esta fase vamos a identificar los objetivos que abarcamos mediante el desarrollo de este proyecto enfatizándonos en las
+              facilidad y agilidad obtenida para un profesional de la salud en especial cuando una fractura no resalta a simple vista, que profesionales
+              tendrán un mayor beneficio con esta herramienta y como se manejará el desarrollo del mismo.
             </p>
 
             <h3>Objetivos de la fase</h3>
             <ul>
-              <li>Identificar los actores clave (radiólogos, técnicos en imágenes, personal administrativo).</li>
-              <li>Definir criterios de éxito clínico y métricas de evaluación (p. ej. sensibilidad, especificidad).</li>
-              <li>Establecer requerimientos funcionales de la aplicación web (login, carga de imágenes, visualización de resultados).</li>
+              <li>Identificar los principales inconvenientes al momento de detectar una fractura.</li>
+              <li>Definir criterios de éxito clínico y métricas de evaluación para mantener bajo el margen de error.</li>
+              <li>Establecer requerimientos funcionales de la aplicación web.</li>
+              <li>.</li>
             </ul>
 
             <h3>Preguntas clave</h3>
             <ul>
-              <li>¿Qué tipos de fracturas y regiones anatómicas se analizarán (muñeca, cadera, etc.)?</li>
+              <li>¿Qué tipos de fracturas y regiones se analizarán?</li>
               <li>¿Qué nivel de confianza mínima se requiere para que una predicción sea considerada útil?</li>
-              <li>¿Cómo se gestionará la privacidad y el consentimiento del paciente?</li>
+              <li>¿Cómo se puede clasificar los tipos de fracturas halladas?</li>
             </ul>
 
             <h3>Resultados esperados</h3>
             <ul>
-              <li>Documento con definición del problema, actores, objetivos y métricas de éxito.</li>
+              <li>Documento con definición del problema, posicionamiento, objetivos y métricas de éxito.</li>
               <li>Lista de requerimientos funcionales para la interfaz web y flujos de usuario.</li>
-              <li>Plan de validación clínica (pasos para pilotaje con profesionales).</li>
+              <li>Aplicativo web con la capacidad de análisis de radiografías e identificación de fracturas.</li>
+              <li>Plan de validación clínica y postdesarrollo por parte de profesionales de la salud.</li>
             </ul>
           </section>
 
@@ -61,17 +63,15 @@
             <h2>Fase 2 — Entendimiento e ingeniería de datos</h2>
 
             <p>
-              Esta fase se centra en reunir, explorar y preparar los datos que se utilizarán para entrenar el modelo.
-              Se prioriza trabajar con datasets confiables, garantizar anonimato y documentar cada transformación aplicada.
+              Esta fase se centra en reunir, explorar y preparar los datos que se utilizarán para entrenar al modelo.
+              Se prioriza trabajar con datasets confiables y garantizar el correcto uso de la información.
             </p>
 
             <h3>Actividades principales</h3>
             <ol>
-              <li>Recolección de datasets públicos y verificación de licencias y uso ético.</li>
-              <li>Exploración inicial: formatos de imagen, resoluciones, relación entre casos positivos y negativos.</li>
-              <li>Limpieza: eliminación de imágenes corruptas/duplicadas y etiquetado consistente.</li>
-              <li>Preprocesamiento: conversión a escala de grises (si aplica), redimensionado (p. ej. 224×224), normalización y aumento de datos si es necesario.</li>
+              <li>Recolección de datasheets públicos de libre uso.</li>
               <li>División del dataset en conjuntos de entrenamiento, validación y prueba.</li>
+              <li>Exploración inicial: formatos de imagen, resoluciones, relación entre casos positivos y negativos.</li>
             </ol>
 
             <h3>Recursos y enlaces (datasets públicos)</h3>
@@ -92,14 +92,13 @@
             <ul>
               <li>Registrar metadatos: fuente, fecha de descarga, número de imágenes por clase y formato.</li>
               <li>Control de calidad: revisar contraste, anotaciones superpuestas o marcas que afecten el entrenamiento.</li>
-              <li>Privacidad: trabajar con datos anonimizados y documentar el manejo ético de la información.</li>
             </ul>
 
             <h3>Resultados esperados</h3>
             <ul>
-              <li>Dataset limpio y estructurado listo para modelado (carpetas /labels/ o CSV con rutas y etiquetas).</li>
-              <li>Notebook o script documentado con los pasos de preprocesamiento aplicados.</li>
-              <li>Informe breve con estadísticas del dataset (clases, balance, ejemplos representativos).</li>
+              <li>Aplicativo web con función de análisis de radiografías e identificación de fracturas.</li>
+              <li>Notebook  documentado con metodología y los pasos de preprocesamiento aplicados.</li>
+              <li>Informe breve con estadísticas del dataset y tipos de datos utilizados.</li>
             </ul>
           </section>
 
