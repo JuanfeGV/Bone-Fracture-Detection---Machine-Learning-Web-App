@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboard - Proyecto Fracturas</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="container">
+<div class="card">
+<h1>Panel de control</h1>
+<p>Bienvenido, <strong>{{ username }}</strong>.</p>
+
+
+<p>En esta sección podrás mostrar información sobre las fases 1 y 2 del proyecto, enlaces a repositorio, datasets y el estado de preparación de los datos.</p>
+
+
+<ul>
+<li><a href="#">Fase 1: Entendimiento del negocio</a></li>
+<li><a href="#">Fase 2: Entendimiento e ingeniería de datos</a></li>
+</ul>
+
+
+<a class="btn-logout" href="{{ url_for('logout') }}">Cerrar sesión</a>
+</div>
+</div>
+</body>
+</html>
