@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Detección de Fracturas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Detección de Fracturas Óseas</h1>
+    <form action="/predict" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".png,.jpg,.jpeg" required>
+        <button type="submit">Analizar imagen</button>
+    </form>
+
+    {% if filename %}
+        <h2>Resultado del análisis</h2>
+        <img src="{{ url_for('display_image', filename=filename) }}" width="300"><br>
+        <p><strong>Parte del cuerpo:</strong> {{ bone_type }}</p>
+        {% if result == 'fractured' %}
+            <p style="color:red;"><strong>Resultado:</strong> Hueso fracturado</p>
+        {% else %}
+            <p style="color:green;"><strong>Resultado:</strong> Hueso normal</p>
+        {% endif %}
+    {% endif %}
+
+    <a href="{{ url_for('menu') }}">Volver al menú</a>
+</body>
+</html>

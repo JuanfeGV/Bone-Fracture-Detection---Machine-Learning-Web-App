@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Análisis de imagen - Proyecto Fracturas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <div class="center">
+      <div class="card">
+        <h1>Análisis de imagen diagnóstica</h1>
+        <p>Sube una radiografía para analizar si el hueso presenta fractura.</p>
+
+        <form method="POST" enctype="multipart/form-data" action="{{ url_for('analizar_imagen') }}">
+          <input type="file" name="imagen" accept="image/*" required>
+          <button type="submit">Analizar imagen</button>
+        </form>
+
+        {% if resultado %}
+          <div class="resultado">
+            <h2>Resultado:</h2>
+            {% if resultado == 'fractura' %}
+              <p style="color: red;">Fractura detectada</p>
+            {% else %}
+              <p style="color: green;">No se detecta fractura</p>
+            {% endif %}
+          </div>
+        {% endif %}
+
+        <a href="{{ url_for('menu') }}" class="btn-volver">Volver al menú</a>
+      </div>
+    </div>
+  </body>
+</html>
