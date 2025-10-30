@@ -2,8 +2,6 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 import os
 from werkzeug.utils import secure_filename
 from predictions import predict
-import tensorflow as tf
-import numpy as np
 
 app = Flask(__name__)
 app.secret_key = 'clave_secreta_segura_123'
@@ -54,37 +52,46 @@ def logout():
     flash('Sesión cerrada correctamente.', 'info')
     return redirect(url_for('login'))
 
-@app.route('/predict', methods=['GET', 'POST'])
-def upload_predict():
+@app.route('/analisis', methods=['GET'])
+def analisis():
+    if 'username' not in session:
+        flash('Debe iniciar sesión para acceder al análisis.', 'warning')
+        return redirect(url_for('login'))
+    return render_template('analisis.html')
+
+@app.route('/analizar_imagen', methods=['POST'])
+def analizar_imagen():
     if 'username' not in session:
         flash('Debe iniciar sesión para acceder al análisis.', 'warning')
         return redirect(url_for('login'))
 
-    if request.method == 'POST':
-        if 'file' not in request.files:
-            flash('No se ha subido ninguna imagen.', 'danger')
-            return redirect(request.url)
-        file = request.files['file']
+    if 'imagen' not in request.files:
+        flash('No se ha subido ninguna imagen.', 'danger')
+        return redirect(request.url)
 
-        if file.filename == '':
-            flash('Seleccione una imagen válida.', 'danger')
-            return redirect(request.url)
+    imagen = request.files['imagen']
 
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            file.save(filepath)
+    if imagen.filename == '':
+        flash('Seleccione una imagen válida.', 'danger')
+        return redirect(request.url)
 
-            bone_type = predict(filepath, "Parts")  # Paso 1: detectar parte del cuerpo
-            fracture_status = predict(filepath, bone_type)  # Paso 2: usar modelo correcto
+    if imagen and allowed_file(imagen.filename):
+        filename = secure_filename(imagen.filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        imagen.save(filepath)
 
-            return render_template(
-                'predict.html',
-                filename=filename,
-                bone_type=bone_type,
-                result=fracture_status
-            )
-    return render_template('predict.html')
+        try:
+            resultado = predict(filepath)
+        except Exception as e:
+            print(f"Error al predecir: {e}")
+            flash('Error al analizar la imagen.', 'danger')
+            return redirect(url_for('analisis'))
+
+        return render_template('analisis.html', resultado=resultado, filename=filename)
+
+    flash('Formato de archivo no permitido. Solo PNG, JPG o JPEG.', 'danger')
+    return redirect(url_for('analisis'))
 
 @app.route('/uploads/<filename>')
 def display_image(filename):
