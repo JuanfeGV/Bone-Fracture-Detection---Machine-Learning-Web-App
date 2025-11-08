@@ -28,7 +28,7 @@ def predict(img, model="Parts"):
     temp_img = image.load_img(img, target_size=(size, size))
     x = image.img_to_array(temp_img)
     x = np.expand_dims(x, axis=0)
-    x = x / 255.0  # 🔥 Normalización crucial
+    x = x / 255.0  # Normalización crucial
 
     prediction = np.argmax(chosen_model.predict(x), axis=1)
 
