@@ -1,57 +1,145 @@
 <!doctype html>
 <html lang="es">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Análisis de imagen - Proyecto Fracturas</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Análisis de Imágenes - Detección de Fracturas</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   </head>
   <body>
-    <div class="center">
-      <div class="card layout">
-        <aside class="sidebar">
-          <div class="brand">Detección de fracturas</div>
-          <button class="dropdown-btn">Menú ▾</button>
-          <nav class="dropdown">
-            <a href="#fase1">Fase 1</a>
-            <a href="#fase2">Fase 2</a>
-            <a href="{{ url_for('analisis') }}">Análisis de imágenes</a>
-          </nav>
-          <div class="warn">
-            <strong>Advertencia:</strong>
+    <div class="main-layout">
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <div class="sidebar-brand">Fracturas</div>
+
+        <ul class="sidebar-menu">
+          <li><a href="{{ url_for('menu') }}">Fase 1: Negocio</a></li>
+          <li><a href="{{ url_for('menu') }}">Fase 2: Datos</a></li>
+          <li><a href="{{ url_for('analisis') }}" class="active">Análisis de Imágenes</a></li>
+        </ul>
+
+        <div class="sidebar-bottom">
+          <div class="warning-box" style="margin-bottom: 20px;">
+            <strong>Advertencia</strong>
             <p>Este sistema solo puede identificar fracturas en imágenes diagnósticas de codo, mano y hombro. Si se sube una imagen diferente, la efectividad del modelo puede no ser la misma.</p>
           </div>
-          <a href="{{ url_for('menu') }}" class="btn btn-secondary">Volver al menú</a>
-        </aside>
+          <a href="{{ url_for('menu') }}" class="btn-logout" style="background: var(--border); color: var(--text); margin-bottom: 10px;">Volver al Menú</a>
+        </div>
+      </aside>
 
-        <main class="main">
-          <h1>Análisis de imagen diagnóstica</h1>
-          <p>Sube una radiografía para analizar si el hueso presenta fractura.</p>
+      <!-- MAIN CONTENT -->
+      <main class="content">
+        <div class="page-header">
+          <h1 class="page-title">Análisis Radiológico</h1>
+          <p class="page-subtitle">Carga una imagen para analizar la presencia de fracturas óseas</p>
+        </div>
 
-          <form method="POST" enctype="multipart/form-data" action="{{ url_for('analizar_imagen') }}">
-            <input type="file" name="imagen" accept="image/*" required>
-            <button type="submit" class="btn btn-primary">Analizar imagen</button>
-          </form>
+        <div class="analisis-container">
+          <!-- UPLOAD SECTION -->
+          <div class="upload-section">
+            <h3 class="upload-title">Cargar Radiografía</h3>
+            <p class="upload-instruction">Selecciona una imagen de radiografía (PNG, JPG o JPEG) para analizarla.</p>
 
-          {% if filename %}
-            <div class="preview">
-              <h3>Imagen subida ({{ body_part if body_part else '—' }})</h3>
-              <img src="{{ url_for('display_image', filename=filename) }}" alt="Imagen subida">
-            </div>
-          {% endif %}
-
-          {% if resultado %}
-            <div class="resultado">
-              <h2>Resultado:</h2>
-              {% if resultado == 'fractured' %}
-                <p class="status fractura">Fractura detectada</p>
-              {% else %}
-                <p class="status normal">No se detecta fractura</p>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div class="alert {{ category }}">{{ message }}</div>
+                {% endfor %}
               {% endif %}
-            </div>
-          {% endif %}
-        </main>
-      </div>
+            {% endwith %}
+
+            <form method="POST" enctype="multipart/form-data" action="{{ url_for('analizar_imagen') }}">
+              <div class="file-input-wrapper">
+                <input type="file" id="imagen" name="imagen" class="file-input" accept="image/*" required>
+                <label for="imagen" class="file-input-label">
+                  <div class="file-input-text">
+                    <strong>Arrastra o haz clic para seleccionar</strong>
+                    <small>Formatos soportados: PNG, JPG, JPEG</small>
+                  </div>
+                </label>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-analizar">Analizar Imagen</button>
+            </form>
+          </div>
+
+          <!-- RESULTS SECTION -->
+          <div class="results-section {% if filename %}active{% endif %}">
+            {% if filename %}
+              <!-- IMAGE PREVIEW -->
+              <div class="image-preview">
+                <img src="{{ url_for('display_image', filename=filename) }}" alt="Radiografía cargada">
+              </div>
+
+              <!-- PREDICTION RESULT -->
+              <div class="prediction-result">
+                {% if resultado %}
+                  <div class="body-part-badge">{{ body_part if body_part else 'Desconocido' }}</div>
+
+                  <div class="result-header">
+                    <div class="result-icon {% if resultado == 'fractured' %}fractured{% else %}normal{% endif %}">
+                      {% if resultado == 'fractured' %}ALERTA{% else %}OK{% endif %}
+                    </div>
+                    <div class="result-text">
+                      <h3 class="{% if resultado == 'fractured' %}fractured{% else %}normal{% endif %}">
+                        {% if resultado == 'fractured' %}Fractura Detectada{% else %}No se Detecta Fractura{% endif %}
+                      </h3>
+                      <p>Análisis completado</p>
+                    </div>
+                  </div>
+
+                  <div class="stats-grid">
+                    <div class="stat-item">
+                      <div class="stat-label">Resultado</div>
+                      <div class="stat-value">
+                        {% if resultado == 'fractured' %}Positivo{% else %}Negativo{% endif %}
+                      </div>
+                    </div>
+                    <div class="stat-item">
+                      <div class="stat-label">Región</div>
+                      <div class="stat-value">{{ body_part if body_part else '—' }}</div>
+                    </div>
+                  </div>
+
+                  <div class="warning-alert">
+                    <strong>Descargo de Responsabilidad</strong>
+                    <p>Este análisis es una herramienta de apoyo diagnóstico y no reemplaza la evaluación clínica de un profesional médico. Siempre consulta con un especialista para confirmación.</p>
+                  </div>
+                {% endif %}
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </main>
     </div>
+
+    <script>
+      // Drag and drop functionality
+      const fileInput = document.getElementById('imagen');
+      const fileLabel = document.querySelector('.file-input-label');
+
+      fileLabel.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        fileLabel.style.borderColor = 'var(--primary)';
+        fileLabel.style.background = 'linear-gradient(135deg, rgba(26, 125, 184, 0.15) 0%, rgba(15, 103, 166, 0.15) 100%)';
+      });
+
+      fileLabel.addEventListener('dragleave', () => {
+        fileLabel.style.borderColor = 'var(--primary-light)';
+        fileLabel.style.background = 'linear-gradient(135deg, rgba(26, 125, 184, 0.05) 0%, rgba(15, 103, 166, 0.05) 100%)';
+      });
+
+      fileLabel.addEventListener('drop', (e) => {
+        e.preventDefault();
+        fileInput.files = e.dataTransfer.files;
+        fileLabel.style.borderColor = 'var(--primary-light)';
+        fileLabel.style.background = 'linear-gradient(135deg, rgba(26, 125, 184, 0.05) 0%, rgba(15, 103, 166, 0.05) 100%)';
+      });
+
+      // Show results when form is submitted
+      document.querySelector('form').addEventListener('submit', () => {
+        document.querySelector('.results-section').classList.add('active');
+      });
+    </script>
   </body>
 </html>

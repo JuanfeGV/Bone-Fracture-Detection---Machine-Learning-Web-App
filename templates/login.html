@@ -1,19 +1,22 @@
 <!doctype html>
 <html lang="es">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Login - Proyecto Fracturas</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Iniciar Sesión - Detección de Fracturas</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   </head>
   <body>
-    <div class="center center-login">
-      <div class="card card-login">
-        <h1 class="brand">Detección de fracturas</h1>
+    <div class="login-container">
+      <div class="login-card">
+        <div class="login-header">
+          <h1>Detección de Fracturas</h1>
+          <p>Sistema avanzado de análisis radiológico</p>
+        </div>
 
         {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
-            <div class="alerts">
+            <div>
               {% for category, message in messages %}
                 <div class="alert {{ category }}">{{ message }}</div>
               {% endfor %}
@@ -22,21 +25,26 @@
         {% endwith %}
 
         <form method="post" action="{{ url_for('login') }}">
-          <label for="username">Usuario</label>
-          <input type="text" id="username" name="username" placeholder="User" required>
+          <div class="form-group">
+            <label for="username">Usuario</label>
+            <input type="text" id="username" name="username" placeholder="Ingresa tu usuario" required>
+          </div>
 
-          <label for="password">Contraseña</label>
-          <input type="password" id="password" name="password" placeholder="*****" required>
+          <div class="form-group">
+            <label for="password">Contraseña</label>
+            <input type="password" id="password" name="password" placeholder="Ingresa tu contraseña" required>
+          </div>
 
-          <button type="submit" class="btn btn-primary">Iniciar sesión</button>
+          <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
         </form>
-        <div class="warn">
-          <strong>Advertencia:</strong>
+
+        <div class="warning-box">
+          <strong>Advertencia</strong>
           <p>Este sistema solo puede identificar fracturas en imágenes diagnósticas de codo, mano y hombro. Si se sube una imagen diferente, la efectividad del modelo puede no ser la misma.</p>
         </div>
 
-        <div class="hint">
-          <strong>Credenciales de prueba</strong>
+        <div class="credentials-box">
+          <strong>Credenciales de Prueba</strong>
           <p>Usuario: <code>admin</code></p>
           <p>Contraseña: <code>fractura123</code></p>
         </div>
