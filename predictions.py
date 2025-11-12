@@ -28,7 +28,8 @@ def predict(img, model="Parts"):
     temp_img = image.load_img(img, target_size=(size, size))
     x = image.img_to_array(temp_img)
     x = np.expand_dims(x, axis=0)
-    x = x / 255.0  # Normalización crucial
+    # Usar la misma normalización de ResNet50 que se usó en entrenamiento
+    x = tf.keras.applications.resnet50.preprocess_input(x)
 
     prediction = np.argmax(chosen_model.predict(x), axis=1)
 

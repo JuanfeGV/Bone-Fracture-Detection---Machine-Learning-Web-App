@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 import os
+import logging
 from werkzeug.utils import secure_filename
 from predictions import predict
 
@@ -9,6 +10,11 @@ app.secret_key = 'clave_secreta_segura_123'
 UPLOAD_FOLDER = 'static/uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
+
+# Configurar logging
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 USER = {
     "username": "admin",
@@ -82,13 +88,20 @@ def analizar_imagen():
         imagen.save(filepath)
 
         try:
-            resultado = predict(filepath)
+            logger.info(f"Processing image: {filepath}")
+            # Primero detectar la parte del cuerpo (Elbow, Hand, Shoulder)
+            body_part = predict(filepath, model="Parts")
+            logger.info(f"Detected body part: {body_part}")
+            # Luego usar el modelo específico para detectar fractura en esa parte
+            fracture_status = predict(filepath, model=body_part)
+            logger.info(f"Fracture status: {fracture_status}")
         except Exception as e:
-            print(f"Error al predecir: {e}")
-            flash('Error al analizar la imagen.', 'danger')
+            logger.error(f"Error al predecir: {e}", exc_info=True)
+            flash('Error al analizar la imagen. Verifica que sea una imagen válida.', 'danger')
             return redirect(url_for('analisis'))
 
-        return render_template('analisis.html', resultado=resultado, filename=filename)
+        # fracture_status contiene 'fractured' o 'normal'
+        return render_template('analisis.html', resultado=fracture_status, filename=filename, body_part=body_part)
 
     flash('Formato de archivo no permitido. Solo PNG, JPG o JPEG.', 'danger')
     return redirect(url_for('analisis'))

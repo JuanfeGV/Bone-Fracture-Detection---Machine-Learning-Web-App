@@ -8,23 +8,33 @@
   </head>
   <body>
     <div class="center">
-      <div class="card">
-        <header class="card-header">
-          <div>
-            <h1>Panel de control</h1>
-            <p class="muted">Proyecto: Detección de fracturas | Usuario: <strong>{{ username }}</strong></p>
-          </div>
-          <div>
-            <a class="btn-logout" href="{{ url_for('logout') }}">Cerrar sesión</a>
-          </div>
-        </header>
+      <div class="card layout">
+        <aside class="sidebar">
+          <div class="brand">Detección de fracturas</div>
+          <button class="dropdown-btn">Menú ▾</button>
+          <nav class="dropdown">
+            <a href="#fase1">Fase 1</a>
+            <a href="#fase2">Fase 2</a>
+            <a href="{{ url_for('analisis') }}">Análisis de imágenes</a>
+          </nav>
+          <div class="muted user">Usuario: <strong>{{ username }}</strong></div>
+          <a class="btn-logout" href="{{ url_for('logout') }}">Cerrar sesión</a>
+        </aside>
 
-        <div class="tabs">
-          <button class="tab-button active" data-target="fase1">Fase 1: Entendimiento del negocio</button>
-          <button class="tab-button" data-target="fase2">Fase 2: Entendimiento e ingeniería de datos</button>
-        </div>
+        <main class="main">
+          <header class="card-header">
+            <div>
+              <h1>Panel de control</h1>
+              <p class="muted">Proyecto: Detección de fracturas</p>
+            </div>
+          </header>
 
-        <div class="tab-content">
+          <div class="tabs">
+            <button class="tab-button active" data-target="fase1">Fase 1: Entendimiento del negocio</button>
+            <button class="tab-button" data-target="fase2">Fase 2: Entendimiento e ingeniería de datos</button>
+          </div>
+
+          <div class="tab-content">
 
           <section id="fase1" class="tab-pane active">
             <h2>Fase 1 — Entendimiento del negocio</h2>
@@ -102,13 +112,13 @@
             </ul>
           </section>
 
-        </div>
+          </div>
 
-        <!-- Botón para acceder al análisis de imágenes -->
-        <div style="text-align: center; margin-top: 30px;">
-          <a href="{{ url_for('analisis') }}" class="btn">Ir al análisis de imágenes</a>
-        </div>
-
+          <!-- Botón para acceder al análisis de imágenes -->
+          <div style="text-align: center; margin-top: 30px;">
+            <a href="{{ url_for('analisis') }}" class="btn btn-primary">Ir al análisis de imágenes</a>
+          </div>
+        </main>
       </div>
     </div>
 

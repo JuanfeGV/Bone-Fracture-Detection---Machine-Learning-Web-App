@@ -1,16 +1,17 @@
 :root{
-  --bg: #0f1112;
-  --surface: #161718;
-  --card-bg: #ffffff;
-  --text: #f3f2ef;
-  --muted: #a7a29a;
-  --accent: #c5b497;
-  --accent-contrast: #2d2720;
-  --danger: #cf5353;
+  /* Minimalismo B/N (modo oscuro) */
+  --bg: #050506;
+  --surface: #0b0b0c;
+  --card-bg: #0b0b0c;
+  --text: #ffffff;
+  --muted: #bfbfbf;
+  --accent: #ffffff;
+  --accent-contrast: #000000;
+  --danger: #ff6b6b;
   --border: rgba(255,255,255,0.06);
   --radius: 10px;
-  --shadow: 0 6px 16px rgba(0,0,0,0.35);
-  --container-max: 980px;
+  --shadow: 0 6px 26px rgba(0,0,0,0.6);
+  --container-max: 1100px;
   --form-radius: 8px;
   --gap: 16px;
 }
@@ -21,7 +22,7 @@ body{
   margin:0;
   min-height:100vh;
   font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
-  background: linear-gradient(180deg,var(--bg) 0%, #0b0c0d 100%);
+  background: var(--bg);
   color:var(--text);
   display:flex;
   align-items:center;
@@ -38,18 +39,18 @@ body{
 }
 
 .card{
-  background:var(--surface);
+  background:var(--card-bg);
   border-radius:var(--radius);
   padding:24px;
   box-shadow:var(--shadow);
-  border:1px solid var(--border);
+  border:1px solid rgba(255,255,255,0.04);
   transition:transform .18s ease, box-shadow .18s ease;
 }
 .card:hover{transform:translateY(-3px); box-shadow:0 10px 28px rgba(0,0,0,0.45)}
 
 .card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.card-header h1{margin:0;font-size:1.15rem;font-weight:600;color:var(--text)}
-.muted{color:var(--muted);font-size:.9rem;margin-top:6px}
+.card-header h1{margin:0;font-size:1.25rem;font-weight:600;color:var(--text)}
+.muted{color:var(--muted);font-size:.95rem;margin-top:6px}
 
 label{display:block;margin-top:12px;font-size:.95rem;color:var(--muted)}
 input[type="text"],input[type="password"],textarea,select{
@@ -82,11 +83,12 @@ button, .btn{
 button:active, .btn:active{transform:translateY(1px)}
 
 .btn-primary{
-  background:var(--accent);
-  color:var(--accent-contrast);
-  box-shadow:0 6px 14px rgba(0,0,0,0.28);
+  background:transparent;
+  color:var(--text);
+  border:1px solid rgba(255,255,255,0.08);
+  padding:10px 14px;
 }
-.btn-primary:hover{filter:brightness(.96)}
+.btn-primary:hover{background:rgba(255,255,255,0.04)}
 
 .btn-secondary{
   background:transparent;
@@ -125,7 +127,7 @@ a:hover{color:var(--accent-contrast)}
 
 .tabs{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
 .tab-button{background:transparent;color:var(--muted);padding:8px 14px;border-radius:10px;border:1px solid transparent;cursor:pointer;font-weight:700}
-.tab-button.active{background:rgba(197,180,151,0.09);color:var(--text);border:1px solid rgba(197,180,151,0.12)}
+.tab-button.active{background:rgba(255,255,255,0.03);color:var(--text);border:1px solid rgba(255,255,255,0.06)}
 .tab-content{margin-top:14px}
 .tab-pane{display:none;opacity:0;transform:translateY(6px);transition:all .18s ease}
 .tab-pane.active{display:block;opacity:1;transform:translateY(0)}
@@ -137,3 +139,24 @@ li{margin-bottom:6px}
   .card{padding:16px}
   .tab-button{padding:7px 10px;font-size:.92rem}
 }
+
+/* Layout para sidebar + main */
+.layout{display:flex;gap:20px;align-items:flex-start}
+.sidebar{width:240px;padding:18px;background:transparent;border-right:1px solid rgba(255,255,255,0.03);display:flex;flex-direction:column;gap:12px}
+.sidebar .brand{font-weight:800;font-size:1.05rem}
+.dropdown-btn{background:transparent;border:none;color:var(--text);font-weight:700;padding:8px 0;cursor:pointer;text-align:left}
+.dropdown{display:flex;flex-direction:column;gap:8px;margin-top:6px}
+.dropdown a{color:var(--muted);text-decoration:none;padding:6px 8px;border-radius:6px}
+.dropdown a:hover{color:var(--text);background:rgba(255,255,255,0.03)}
+.warn{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.02);padding:10px;border-radius:8px;color:var(--muted);font-size:.9rem}
+.main{flex:1}
+.preview img{max-width:320px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);margin-top:10px}
+.resultado{margin-top:16px}
+.status{font-weight:800;font-size:1.05rem}
+.status.fractura{color:var(--danger)}
+.status.normal{color:#b6e3b6}
+
+/* Ajustes para login */
+.center-login{display:flex;align-items:center;justify-content:center;height:100vh}
+.card-login{max-width:420px}
+.brand{font-weight:900;font-size:1.1rem}
