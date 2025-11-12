@@ -35,46 +35,59 @@ html, body {
 
 body {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   min-height: 100vh;
-  padding: 20px;
+  padding: 40px 20px;
 }
 
 /* ═══════════════════════════════════════ LOGIN ═══════════════════════════════════════ */
 
 .login-container {
   width: 100%;
-  max-width: 420px;
+  max-width: 100%;
+  margin: 0;
 }
 
 .login-card {
   background: var(--surface);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow);
-  padding: 48px 40px;
+  padding: 48px 60px;
   border: 1px solid var(--border);
+  max-width: 800px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: start;
 }
 
 .login-header {
-  text-align: center;
-  margin-bottom: 40px;
+  text-align: left;
+  margin-bottom: 0;
 }
 
 .login-header h1 {
-  font-size: 32px;
+  font-size: 48px;
   font-weight: 700;
   background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  margin-bottom: 8px;
+  margin-bottom: 16px;
 }
 
 .login-header p {
   color: var(--text-muted);
   font-size: 14px;
   font-weight: 500;
+}
+
+.login-form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .form-group {

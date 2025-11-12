@@ -14,40 +14,42 @@
           <p>Sistema avanzado de análisis radiológico</p>
         </div>
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
-          {% if messages %}
-            <div>
-              {% for category, message in messages %}
-                <div class="alert {{ category }}">{{ message }}</div>
-              {% endfor %}
+        <div class="login-form-section">
+          {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+              <div>
+                {% for category, message in messages %}
+                  <div class="alert {{ category }}">{{ message }}</div>
+                {% endfor %}
+              </div>
+            {% endif %}
+          {% endwith %}
+
+          <form method="post" action="{{ url_for('login') }}">
+            <div class="form-group">
+              <label for="username">Usuario</label>
+              <input type="text" id="username" name="username" placeholder="Ingresa tu usuario" required>
             </div>
-          {% endif %}
-        {% endwith %}
 
-        <form method="post" action="{{ url_for('login') }}">
-          <div class="form-group">
-            <label for="username">Usuario</label>
-            <input type="text" id="username" name="username" placeholder="Ingresa tu usuario" required>
+            <div class="form-group">
+              <label for="password">Contraseña</label>
+              <input type="password" id="password" name="password" placeholder="Ingresa tu contraseña" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+          </form>
+
+          <div class="credentials-box">
+            <strong>Credenciales de Prueba</strong>
+            <p>Usuario: <code>admin</code></p>
+            <p>Contraseña: <code>fractura123</code></p>
           </div>
-
-          <div class="form-group">
-            <label for="password">Contraseña</label>
-            <input type="password" id="password" name="password" placeholder="Ingresa tu contraseña" required>
-          </div>
-
-          <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
-        </form>
-
-        <div class="warning-box">
-          <strong>Advertencia</strong>
-          <p>Este sistema solo puede identificar fracturas en imágenes diagnósticas de codo, mano y hombro. Si se sube una imagen diferente, la efectividad del modelo puede no ser la misma.</p>
         </div>
+      </div>
 
-        <div class="credentials-box">
-          <strong>Credenciales de Prueba</strong>
-          <p>Usuario: <code>admin</code></p>
-          <p>Contraseña: <code>fractura123</code></p>
-        </div>
+      <div class="warning-box" style="margin-top: 20px; max-width: 800px; margin-left: auto; margin-right: auto;">
+        <strong>Advertencia</strong>
+        <p>Este sistema solo puede identificar fracturas en imágenes diagnósticas de codo, mano y hombro. Si se sube una imagen diferente, la efectividad del modelo puede no ser la misma.</p>
       </div>
     </div>
   </body>

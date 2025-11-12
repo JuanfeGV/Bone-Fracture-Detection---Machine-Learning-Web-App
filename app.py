@@ -21,6 +21,15 @@ USER = {
     "password": "fractura123"
 }
 
+def translate_body_part(english_term):
+    """Traducir términos de partes del cuerpo del inglés al español"""
+    translations = {
+        "Elbow": "Codo",
+        "Hand": "Mano",
+        "Shoulder": "Hombro"
+    }
+    return translations.get(english_term, english_term)
+
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
@@ -63,7 +72,13 @@ def analisis():
     if 'username' not in session:
         flash('Debe iniciar sesión para acceder al análisis.', 'warning')
         return redirect(url_for('login'))
-    return render_template('analisis.html')
+    # Pasar diccionario de traducciones al template
+    translations = {
+        "Elbow": "Codo",
+        "Hand": "Mano",
+        "Shoulder": "Hombro"
+    }
+    return render_template('analisis.html', translations=translations)
 
 @app.route('/analizar_imagen', methods=['POST'])
 def analizar_imagen():
@@ -101,7 +116,9 @@ def analizar_imagen():
             return redirect(url_for('analisis'))
 
         # fracture_status contiene 'fractured' o 'normal'
-        return render_template('analisis.html', resultado=fracture_status, filename=filename, body_part=body_part)
+        # Traducir la parte del cuerpo
+        body_part_translated = translate_body_part(body_part)
+        return render_template('analisis.html', resultado=fracture_status, filename=filename, body_part=body_part_translated)
 
     flash('Formato de archivo no permitido. Solo PNG, JPG o JPEG.', 'danger')
     return redirect(url_for('analisis'))

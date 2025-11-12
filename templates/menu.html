@@ -35,12 +35,6 @@
           <p class="page-subtitle">Bienvenido al sistema de detección de fracturas óseas</p>
         </div>
 
-        <!-- TABS -->
-        <div class="tabs-container">
-          <button class="tab-button active" data-tab="fase1">Fase 1: Entendimiento del Negocio</button>
-          <button class="tab-button" data-tab="fase2">Fase 2: Ingeniería de Datos</button>
-        </div>
-
         <!-- TAB CONTENT: FASE 1 -->
         <div class="tab-content active" id="fase1">
           <h2>Fase 1 — Entendimiento del Negocio</h2>
@@ -67,8 +61,6 @@
             <li>Aplicativo web con capacidad de análisis radiográfico e identificación de fracturas.</li>
             <li>Plan de validación clínica por parte de profesionales de la salud.</li>
           </ul>
-
-          <a href="{{ url_for('analisis') }}" class="btn btn-primary btn-goto-analisis">Ir a Análisis de Imágenes</a>
         </div>
 
         <!-- TAB CONTENT: FASE 2 -->
@@ -101,14 +93,11 @@
             <li>Notebook documentado con metodología y pasos de preprocesamiento.</li>
             <li>Informe breve con estadísticas del dataset y tipos de datos utilizados.</li>
           </ul>
-
-          <a href="{{ url_for('analisis') }}" class="btn btn-primary btn-goto-analisis">Ir a Análisis de Imágenes</a>
         </div>
       </main>
     </div>
 
     <script>
-      // Handle tab switching
       document.querySelectorAll('[data-tab]').forEach(button => {
         button.addEventListener('click', (e) => {
           if (e.target.classList.contains('tab-nav')) {
@@ -121,115 +110,6 @@
           
           button.classList.add('active');
           document.getElementById(tabId)?.classList.add('active');
-        });
-      });
-    </script>
-  </body>
-</html>
-
-          <div class="tabs">
-            <button class="tab-button active" data-target="fase1">Fase 1: Entendimiento del negocio</button>
-            <button class="tab-button" data-target="fase2">Fase 2: Entendimiento e ingeniería de datos</button>
-          </div>
-
-          <div class="tab-content">
-
-          <section id="fase1" class="tab-pane active">
-            <h2>Fase 1 — Entendimiento del negocio</h2>
-
-            <p>
-              En esta fase vamos a identificar los objetivos que abarcamos mediante el desarrollo de este proyecto enfatizándonos en las
-              facilidad y agilidad obtenida para un profesional de la salud en especial cuando una fractura no resalta a simple vista, que profesionales
-              tendrán un mayor beneficio con esta herramienta y cómo se manejará el desarrollo del mismo.
-            </p>
-
-            <h3>Objetivos de la fase</h3>
-            <ul>
-              <li>Identificar los principales inconvenientes al momento de detectar una fractura.</li>
-              <li>Definir criterios de éxito clínico y métricas de evaluación para mantener bajo el margen de error.</li>
-              <li>Establecer requerimientos funcionales de la aplicación web.</li>
-              <li>.</li>
-            </ul>
-
-            <h3>Preguntas clave</h3>
-            <ul>
-              <li>¿Qué tipos de fracturas y regiones se analizarán?</li>
-              <li>¿Qué nivel de confianza mínima se requiere para que una predicción sea considerada útil?</li>
-              <li>¿Cómo se pueden clasificar los tipos de fracturas halladas?</li>
-            </ul>
-
-            <h3>Resultados esperados</h3>
-            <ul>
-              <li>Documento con definición del problema, posicionamiento, objetivos y métricas de éxito.</li>
-              <li>Lista de requerimientos funcionales para la interfaz web y flujos de usuario.</li>
-              <li>Aplicativo web con la capacidad de análisis de radiografías e identificación de fracturas.</li>
-              <li>Plan de validación clínica y postdesarrollo por parte de profesionales de la salud.</li>
-            </ul>
-          </section>
-
-          <section id="fase2" class="tab-pane">
-            <h2>Fase 2 — Entendimiento e ingeniería de datos</h2>
-
-            <p>
-              Esta fase se centra en reunir, explorar y preparar los datos que se utilizarán para entrenar al modelo.
-              Se prioriza trabajar con datasets confiables y garantizar el correcto uso de la información.
-            </p>
-
-            <h3>Actividades principales</h3>
-            <ol>
-              <li>Recolección de datasheets públicos de libre uso.</li>
-              <li>División del dataset en conjuntos de entrenamiento, validación y prueba.</li>
-              <li>Exploración inicial: formatos de imagen, resoluciones, relación entre casos positivos y negativos.</li>
-            </ol>
-
-            <h3>Recursos y enlaces (datasets públicos)</h3>
-            <ul>
-              <li>
-                <a href="https://www.kaggle.com/datasets/orvile/bone-fracture-dataset/data" target="_blank" rel="noopener">
-                  Bone Fracture Dataset — Kaggle
-                </a>
-              </li>
-              <li>
-                <a href="https://www.kaggle.com/datasets/rprajwal07/bone-fracture-detection/data" target="_blank" rel="noopener">
-                  Bone Fracture Detection — Kaggle
-                </a>
-              </li>
-            </ul>
-
-            <h3>Consideraciones técnicas</h3>
-            <ul>
-              <li>Registrar metadatos: fuente, fecha de descarga, número de imágenes por clase y formato.</li>
-              <li>Control de calidad: revisar contraste, anotaciones superpuestas o marcas que afecten el entrenamiento.</li>
-            </ul>
-
-            <h3>Resultados esperados</h3>
-            <ul>
-              <li>Aplicativo web con función de análisis de radiografías e identificación de fracturas.</li>
-              <li>Notebook documentado con metodología y los pasos de preprocesamiento aplicados.</li>
-              <li>Informe breve con estadísticas del dataset y tipos de datos utilizados.</li>
-            </ul>
-          </section>
-
-          </div>
-
-          <!-- Botón para acceder al análisis de imágenes -->
-          <div style="text-align: center; margin-top: 30px;">
-            <a href="{{ url_for('analisis') }}" class="btn btn-primary">Ir al análisis de imágenes</a>
-          </div>
-        </main>
-      </div>
-    </div>
-
-    <script>
-      document.querySelectorAll('.tab-button').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const target = btn.getAttribute('data-target');
-          document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
-          const pane = document.getElementById(target);
-          if (pane) pane.classList.add('active');
-          pane.scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
       });
     </script>
