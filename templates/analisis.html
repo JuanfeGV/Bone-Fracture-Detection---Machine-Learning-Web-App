@@ -48,6 +48,13 @@
               {% endif %}
             {% endwith %}
 
+            {% if filename %}
+              <div class="alert alert-info">Imagen cargada: {{ filename }}</div>
+              <div class="image-thumb" style="margin-bottom:12px;">
+                <img src="{{ url_for('display_image', filename=filename) }}" alt="Miniatura" style="max-width:150px; border-radius:4px;">
+              </div>
+            {% endif %}
+
             <form method="POST" enctype="multipart/form-data" action="{{ url_for('analizar_imagen') }}">
               <div class="file-input-wrapper">
                 <input type="file" id="imagen" name="imagen" class="file-input" accept="image/*" required>

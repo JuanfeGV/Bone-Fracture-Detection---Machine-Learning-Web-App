@@ -102,6 +102,9 @@ def analizar_imagen():
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
         imagen.save(filepath)
 
+        # feedback inmediato: mostramos el nombre con flash (no se guarda en sesión)
+        flash(f'Imagen cargada: {filename}', 'info')
+
         try:
             logger.info(f"Processing image: {filepath}")
             # Primero detectar la parte del cuerpo (Elbow, Hand, Shoulder)
