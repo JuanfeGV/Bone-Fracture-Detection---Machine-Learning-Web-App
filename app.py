@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 import os
-import logging
 from werkzeug.utils import secure_filename
 from predictions import predict
 
@@ -12,16 +11,12 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 
-# Configurar logging
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
-
-USER = {
+USER = { #Hpta segurdad de Temu
     "username": "admin",
     "password": "fractura123"
 }
 
-def translate_body_part(english_term):
+def translate_body_part(english_term): #Función para traducir  debido al miedo de tocar el dataset
     """Traducir términos de partes del cuerpo del inglés al español"""
     translations = {
         "Elbow": "Codo",
@@ -30,16 +25,17 @@ def translate_body_part(english_term):
     }
     return translations.get(english_term, english_term)
 
-def allowed_file(filename):
+def allowed_file(filename): # Evitar que me monten flappy Bird en la app
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+#-----------------------------------------------------------------------------------------
 @app.route('/')
-def home():
+def home(): #Agregar cierre automatico de sesión
     if 'username' in session:
         return redirect(url_for('menu'))
     return redirect(url_for('login'))
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login', methods=['GET', 'POST']) #xD
 def login():
     if request.method == 'POST':
         username = request.form['username']
@@ -54,7 +50,7 @@ def login():
             return render_template('login.html')
     return render_template('login.html')
 
-@app.route('/menu')
+@app.route('/menu') #Tampoco somos Temu
 def menu():
     if 'username' not in session:
         flash('Debe iniciar sesión para acceder al menú.', 'warning')
@@ -72,13 +68,7 @@ def analisis():
     if 'username' not in session:
         flash('Debe iniciar sesión para acceder al análisis.', 'warning')
         return redirect(url_for('login'))
-    # Pasar diccionario de traducciones al template
-    translations = {
-        "Elbow": "Codo",
-        "Hand": "Mano",
-        "Shoulder": "Hombro"
-    }
-    return render_template('analisis.html', translations=translations)
+    return render_template('analisis.html')
 
 @app.route('/analizar_imagen', methods=['POST'])
 def analizar_imagen():
@@ -106,20 +96,12 @@ def analizar_imagen():
         flash(f'Imagen cargada: {filename}', 'info')
 
         try:
-            logger.info(f"Processing image: {filepath}")
-            # Primero detectar la parte del cuerpo (Elbow, Hand, Shoulder)
             body_part = predict(filepath, model="Parts")
-            logger.info(f"Detected body part: {body_part}")
-            # Luego usar el modelo específico para detectar fractura en esa parte
             fracture_status = predict(filepath, model=body_part)
-            logger.info(f"Fracture status: {fracture_status}")
         except Exception as e:
-            logger.error(f"Error al predecir: {e}", exc_info=True)
             flash('Error al analizar la imagen. Verifica que sea una imagen válida.', 'danger')
             return redirect(url_for('analisis'))
 
-        # fracture_status contiene 'fractured' o 'normal'
-        # Traducir la parte del cuerpo
         body_part_translated = translate_body_part(body_part)
         return render_template('analisis.html', resultado=fracture_status, filename=filename, body_part=body_part_translated)
 
