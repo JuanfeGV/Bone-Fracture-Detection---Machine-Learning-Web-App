@@ -1,12 +1,37 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
+import os
+import logging
+from werkzeug.utils import secure_filename
+from predictions import predict
 
 app = Flask(__name__)
 app.secret_key = 'clave_secreta_segura_123'
+
+UPLOAD_FOLDER = 'static/uploads'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
+
+# Configurar logging
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 USER = {
     "username": "admin",
     "password": "fractura123"
 }
+
+def translate_body_part(english_term):
+    """Traducir términos de partes del cuerpo del inglés al español"""
+    translations = {
+        "Elbow": "Codo",
+        "Hand": "Mano",
+        "Shoulder": "Hombro"
+    }
+    return translations.get(english_term, english_term)
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route('/')
 def home():
@@ -42,5 +67,66 @@ def logout():
     flash('Sesión cerrada correctamente.', 'info')
     return redirect(url_for('login'))
 
+@app.route('/analisis', methods=['GET'])
+def analisis():
+    if 'username' not in session:
+        flash('Debe iniciar sesión para acceder al análisis.', 'warning')
+        return redirect(url_for('login'))
+    # Pasar diccionario de traducciones al template
+    translations = {
+        "Elbow": "Codo",
+        "Hand": "Mano",
+        "Shoulder": "Hombro"
+    }
+    return render_template('analisis.html', translations=translations)
+
+@app.route('/analizar_imagen', methods=['POST'])
+def analizar_imagen():
+    if 'username' not in session:
+        flash('Debe iniciar sesión para acceder al análisis.', 'warning')
+        return redirect(url_for('login'))
+
+    if 'imagen' not in request.files:
+        flash('No se ha subido ninguna imagen.', 'danger')
+        return redirect(request.url)
+
+    imagen = request.files['imagen']
+
+    if imagen.filename == '':
+        flash('Seleccione una imagen válida.', 'danger')
+        return redirect(request.url)
+
+    if imagen and allowed_file(imagen.filename):
+        filename = secure_filename(imagen.filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        imagen.save(filepath)
+
+        try:
+            logger.info(f"Processing image: {filepath}")
+            # Primero detectar la parte del cuerpo (Elbow, Hand, Shoulder)
+            body_part = predict(filepath, model="Parts")
+            logger.info(f"Detected body part: {body_part}")
+            # Luego usar el modelo específico para detectar fractura en esa parte
+            fracture_status = predict(filepath, model=body_part)
+            logger.info(f"Fracture status: {fracture_status}")
+        except Exception as e:
+            logger.error(f"Error al predecir: {e}", exc_info=True)
+            flash('Error al analizar la imagen. Verifica que sea una imagen válida.', 'danger')
+            return redirect(url_for('analisis'))
+
+        # fracture_status contiene 'fractured' o 'normal'
+        # Traducir la parte del cuerpo
+        body_part_translated = translate_body_part(body_part)
+        return render_template('analisis.html', resultado=fracture_status, filename=filename, body_part=body_part_translated)
+
+    flash('Formato de archivo no permitido. Solo PNG, JPG o JPEG.', 'danger')
+    return redirect(url_for('analisis'))
+
+@app.route('/uploads/<filename>')
+def display_image(filename):
+    return redirect(url_for('static', filename='uploads/' + filename), code=301)
+
 if __name__ == '__main__':
+    os.makedirs(UPLOAD_FOLDER, exist_ok=True)
     app.run(debug=True)

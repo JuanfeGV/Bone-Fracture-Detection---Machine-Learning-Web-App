@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Análisis de Imágenes - Detección de Fracturas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body class="analisis-page">
+    <div class="main-layout">
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <div class="sidebar-brand">Fracturas</div>
+
+        <ul class="sidebar-menu">
+          <li><a href="{{ url_for('menu') }}">Fase 1: Negocio</a></li>
+          <li><a href="{{ url_for('menu') }}">Fase 2: Datos</a></li>
+          <li><a href="{{ url_for('analisis') }}" class="active">Análisis de Imágenes</a></li>
+        </ul>
+
+        <div class="sidebar-bottom">
+          <div class="warning-box" style="margin-bottom: 20px;">
+            <strong>Advertencia</strong>
+            <p>Este sistema solo puede identificar fracturas en imágenes diagnósticas de codo, mano y hombro. Si se sube una imagen diferente, la efectividad del modelo puede no ser la misma.</p>
+          </div>
+          <a href="{{ url_for('menu') }}" class="btn-logout" style="background: var(--border); color: var(--text); margin-bottom: 10px;">Volver al Menú</a>
+        </div>
+      </aside>
+
+      <!-- MAIN CONTENT -->
+      <main class="content">
+        <div class="page-header">
+          <h1 class="page-title">Análisis Radiológico</h1>
+          <p class="page-subtitle">Carga una imagen para analizar la presencia de fracturas óseas</p>
+        </div>
+
+        <div class="analisis-container">
+          <!-- UPLOAD SECTION -->
+          <div class="upload-section">
+            <h3 class="upload-title">Cargar Radiografía</h3>
+            <p class="upload-instruction">Selecciona una imagen de radiografía (PNG, JPG o JPEG) para analizarla.</p>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div class="alert {{ category }}">{{ message }}</div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+
+            <form method="POST" enctype="multipart/form-data" action="{{ url_for('analizar_imagen') }}">
+              <div class="file-input-wrapper">
+                <input type="file" id="imagen" name="imagen" class="file-input" accept="image/*" required>
+                <label for="imagen" class="file-input-label" id="fileLabel">
+                  <div class="file-input-text" id="fileInputText">
+                    <strong>Arrastra o haz clic para seleccionar</strong>
+                    <small>Formatos soportados: PNG, JPG, JPEG</small>
+                  </div>
+                </label>
+                <div class="file-selected-indicator" id="fileSelectedIndicator" style="display: none;">
+                  <div class="checkmark" style="color: #00a86b; font-size: 24px; margin-bottom: 8px;">✓</div>
+                  <div class="selected-filename" id="selectedFilename"></div>
+                  <small style="color: var(--text-muted);">Archivo listo para analizar</small>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-analizar" id="btnAnalizar">Analizar Imagen</button>
+            </form>
+          </div>
+
+          <!-- RESULTS SECTION -->
+          <div class="results-section {% if filename %}active{% endif %}">
+            {% if filename %}
+              <!-- IMAGE PREVIEW -->
+              <div class="image-preview">
+                <img src="{{ url_for('display_image', filename=filename) }}" alt="Radiografía cargada">
+              </div>
+
+              <!-- PREDICTION RESULT -->
+              <div class="prediction-result">
+                {% if resultado %}
+                  <div class="body-part-badge">{{ body_part if body_part else 'Desconocido' }}</div>
+
+                  <div class="result-header">
+                    <div class="result-icon {% if resultado == 'fractured' %}fractured{% else %}normal{% endif %}">
+                      {% if resultado == 'fractured' %}ALERTA{% else %}OK{% endif %}
+                    </div>
+                    <div class="result-text">
+                      <h3 class="{% if resultado == 'fractured' %}fractured{% else %}normal{% endif %}">
+                        {% if resultado == 'fractured' %}Fractura Detectada{% else %}No se Detecta Fractura{% endif %}
+                      </h3>
+                      <p>Análisis completado</p>
+                    </div>
+                  </div>
+
+                  <div class="stats-grid">
+                    <div class="stat-item">
+                      <div class="stat-label">Resultado</div>
+                      <div class="stat-value">
+                        {% if resultado == 'fractured' %}Positivo{% else %}Negativo{% endif %}
+                      </div>
+                    </div>
+                    <div class="stat-item">
+                      <div class="stat-label">Región</div>
+                      <div class="stat-value">{{ body_part if body_part else '—' }}</div>
+                    </div>
+                  </div>
+
+                  <div class="warning-alert">
+                    <strong>Descargo de Responsabilidad</strong>
+                    <p>Este análisis es una herramienta de apoyo diagnóstico y no reemplaza la evaluación clínica de un profesional médico. Siempre consulta con un especialista para confirmación.</p>
+                  </div>
+                {% endif %}
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      // Referencias a elementos
+      const fileInput = document.getElementById('imagen');
+      const fileLabel = document.querySelector('.file-input-label');
+      const fileInputText = document.getElementById('fileInputText');
+      const fileSelectedIndicator = document.getElementById('fileSelectedIndicator');
+      const selectedFilename = document.getElementById('selectedFilename');
+      const btnAnalizar = document.getElementById('btnAnalizar');
+
+      // Detectar cuando se selecciona un archivo
+      fileInput.addEventListener('change', (e) => {
+        if (fileInput.files && fileInput.files.length > 0) {
+          const fileName = fileInput.files[0].name;
+          showFileSelected(fileName);
+        }
+      });
+
+      // Mostrar indicador de archivo seleccionado
+      function showFileSelected(fileName) {
+        fileInputText.style.display = 'none';
+        fileSelectedIndicator.style.display = 'flex';
+        fileSelectedIndicator.flexDirection = 'column';
+        fileSelectedIndicator.alignItems = 'center';
+        fileSelectedIndicator.textAlign = 'center';
+        selectedFilename.textContent = fileName;
+        fileLabel.style.borderColor = '#00a86b';
+        fileLabel.style.background = 'linear-gradient(135deg, rgba(0, 168, 107, 0.15) 0%, rgba(0, 168, 107, 0.1) 100%)';
+        btnAnalizar.style.opacity = '1';
+        btnAnalizar.style.pointerEvents = 'auto';
+      }
+
+      // Detectar cambios en drag and drop
+      if (fileLabel) {
+        fileLabel.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          if (!fileInput.files || fileInput.files.length === 0) {
+            fileLabel.style.borderColor = 'var(--primary)';
+            fileLabel.style.background = 'linear-gradient(135deg, rgba(26, 125, 184, 0.15) 0%, rgba(15, 103, 166, 0.15) 100%)';
+          }
+        });
+
+        fileLabel.addEventListener('dragleave', () => {
+          if (!fileInput.files || fileInput.files.length === 0) {
+            fileLabel.style.borderColor = 'var(--primary-light)';
+            fileLabel.style.background = 'linear-gradient(135deg, rgba(26, 125, 184, 0.05) 0%, rgba(15, 103, 166, 0.05) 100%)';
+          }
+        });
+
+        fileLabel.addEventListener('drop', (e) => {
+          e.preventDefault();
+          if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+            fileInput.files = e.dataTransfer.files;
+            const fileName = e.dataTransfer.files[0].name;
+            showFileSelected(fileName);
+          }
+          fileLabel.style.borderColor = 'var(--primary-light)';
+          fileLabel.style.background = 'linear-gradient(135deg, rgba(26, 125, 184, 0.05) 0%, rgba(15, 103, 166, 0.05) 100%)';
+        });
+      }
+
+      // Show results when form is submitted
+      const form = document.querySelector('form');
+      if (form) {
+        form.addEventListener('submit', () => {
+          const resultsSection = document.querySelector('.results-section');
+          if (resultsSection) {
+            resultsSection.classList.add('active');
+          }
+        });
+      }
+    </script>
+  </body>
+</html>
