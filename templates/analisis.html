@@ -51,15 +51,20 @@
             <form method="POST" enctype="multipart/form-data" action="{{ url_for('analizar_imagen') }}">
               <div class="file-input-wrapper">
                 <input type="file" id="imagen" name="imagen" class="file-input" accept="image/*" required>
-                <label for="imagen" class="file-input-label">
-                  <div class="file-input-text">
+                <label for="imagen" class="file-input-label" id="fileLabel">
+                  <div class="file-input-text" id="fileInputText">
                     <strong>Arrastra o haz clic para seleccionar</strong>
                     <small>Formatos soportados: PNG, JPG, JPEG</small>
                   </div>
                 </label>
+                <div class="file-selected-indicator" id="fileSelectedIndicator" style="display: none;">
+                  <div class="checkmark" style="color: #00a86b; font-size: 24px; margin-bottom: 8px;">✓</div>
+                  <div class="selected-filename" id="selectedFilename"></div>
+                  <small style="color: var(--text-muted);">Archivo listo para analizar</small>
+                </div>
               </div>
 
-              <button type="submit" class="btn btn-primary btn-analizar">Analizar Imagen</button>
+              <button type="submit" class="btn btn-primary btn-analizar" id="btnAnalizar">Analizar Imagen</button>
             </form>
           </div>
 
@@ -114,25 +119,60 @@
     </div>
 
     <script>
-      // Drag and drop functionality
+      // Referencias a elementos
       const fileInput = document.getElementById('imagen');
       const fileLabel = document.querySelector('.file-input-label');
+      const fileInputText = document.getElementById('fileInputText');
+      const fileSelectedIndicator = document.getElementById('fileSelectedIndicator');
+      const selectedFilename = document.getElementById('selectedFilename');
+      const btnAnalizar = document.getElementById('btnAnalizar');
 
+      // Detectar cuando se selecciona un archivo
+      fileInput.addEventListener('change', (e) => {
+        if (fileInput.files && fileInput.files.length > 0) {
+          const fileName = fileInput.files[0].name;
+          showFileSelected(fileName);
+        }
+      });
+
+      // Mostrar indicador de archivo seleccionado
+      function showFileSelected(fileName) {
+        fileInputText.style.display = 'none';
+        fileSelectedIndicator.style.display = 'flex';
+        fileSelectedIndicator.flexDirection = 'column';
+        fileSelectedIndicator.alignItems = 'center';
+        fileSelectedIndicator.textAlign = 'center';
+        selectedFilename.textContent = fileName;
+        fileLabel.style.borderColor = '#00a86b';
+        fileLabel.style.background = 'linear-gradient(135deg, rgba(0, 168, 107, 0.15) 0%, rgba(0, 168, 107, 0.1) 100%)';
+        btnAnalizar.style.opacity = '1';
+        btnAnalizar.style.pointerEvents = 'auto';
+      }
+
+      // Detectar cambios en drag and drop
       if (fileLabel) {
         fileLabel.addEventListener('dragover', (e) => {
           e.preventDefault();
-          fileLabel.style.borderColor = 'var(--primary)';
-          fileLabel.style.background = 'linear-gradient(135deg, rgba(26, 125, 184, 0.15) 0%, rgba(15, 103, 166, 0.15) 100%)';
+          if (!fileInput.files || fileInput.files.length === 0) {
+            fileLabel.style.borderColor = 'var(--primary)';
+            fileLabel.style.background = 'linear-gradient(135deg, rgba(26, 125, 184, 0.15) 0%, rgba(15, 103, 166, 0.15) 100%)';
+          }
         });
 
         fileLabel.addEventListener('dragleave', () => {
-          fileLabel.style.borderColor = 'var(--primary-light)';
-          fileLabel.style.background = 'linear-gradient(135deg, rgba(26, 125, 184, 0.05) 0%, rgba(15, 103, 166, 0.05) 100%)';
+          if (!fileInput.files || fileInput.files.length === 0) {
+            fileLabel.style.borderColor = 'var(--primary-light)';
+            fileLabel.style.background = 'linear-gradient(135deg, rgba(26, 125, 184, 0.05) 0%, rgba(15, 103, 166, 0.05) 100%)';
+          }
         });
 
         fileLabel.addEventListener('drop', (e) => {
           e.preventDefault();
-          fileInput.files = e.dataTransfer.files;
+          if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+            fileInput.files = e.dataTransfer.files;
+            const fileName = e.dataTransfer.files[0].name;
+            showFileSelected(fileName);
+          }
           fileLabel.style.borderColor = 'var(--primary-light)';
           fileLabel.style.background = 'linear-gradient(135deg, rgba(26, 125, 184, 0.05) 0%, rgba(15, 103, 166, 0.05) 100%)';
         });

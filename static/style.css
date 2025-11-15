@@ -545,6 +545,35 @@ body {
   background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(5, 150, 105, 0.08) 100%);
 }
 
+.file-selected-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  border-radius: var(--radius);
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.selected-filename {
+  font-weight: 600;
+  color: var(--text);
+  font-size: 14px;
+  word-break: break-word;
+  max-width: 100%;
+}
+
 .file-input-icon {
   font-size: 32px;
   margin-right: 12px;
