@@ -169,52 +169,9 @@
         <!-- TAB CONTENT: FASE 4 -->
         <div class="tab-content" id="fase4">
           <h2>Fase 4 — Evaluación</h2>
-          <p>En esta fase se evalúa exhaustivamente el desempeño del modelo entrenado usando métricas clínicas y estadísticas. Se valida la capacidad de generalización y se analizan resultados en escenarios del mundo real.</p>
+          <p>En esta fase se evalúa el desempeño del modelo entrenado mediante las curvas de pérdida y precisión durante el entrenamiento. Las gráficas demuestran la efectividad del aprendizaje del modelo para cada región anatómica.</p>
 
-          <h3>Métricas de Evaluación</h3>
-          <ul>
-            <li><strong>Precisión (Accuracy):</strong> Porcentaje total de predicciones correctas.</li>
-            <li><strong>Sensibilidad (Recall):</strong> Capacidad de detectar casos positivos (fracturas presentes).</li>
-            <li><strong>Especificidad:</strong> Capacidad de identificar casos negativos (ausencia de fractura).</li>
-            <li><strong>Precisión (Precision):</strong> Confiabilidad de las predicciones positivas.</li>
-            <li><strong>F1-Score:</strong> Balance entre precisión y sensibilidad.</li>
-            <li><strong>Curva ROC y AUC:</strong> Evaluación de rendimiento a diferentes umbrales de decisión.</li>
-          </ul>
-
-          <h3>Resultados Obtenidos</h3>
-          <ul>
-            <li><strong>Modelo Detector de Región:</strong> Precisión 92% en clasificación de codo/mano/hombro.</li>
-            <li><strong>Modelo Codo:</strong> Sensibilidad 87%, Especificidad 90%, AUC 0.91.</li>
-            <li><strong>Modelo Mano:</strong> Sensibilidad 85%, Especificidad 89%, AUC 0.89.</li>
-            <li><strong>Modelo Hombro:</strong> Sensibilidad 88%, Especificidad 91%, AUC 0.92.</li>
-          </ul>
-
-          <h3>Análisis de Resultados</h3>
-          <ul>
-            <li>El modelo demuestra capacidad confiable para detectar fracturas en las tres regiones evaluadas.</li>
-            <li>Sensibilidad alta indica bajo riesgo de falsos negativos (fracturas no detectadas).</li>
-            <li>Especificidad adecuada minimiza falsos positivos (alarmas innecesarias).</li>
-            <li>Las curvas ROC confirman buen desempeño discriminativo en todas las regiones.</li>
-          </ul>
-
-          <h3>Matriz de Confusión</h3>
-          <div style="margin: 24px 0; padding: 24px; background: var(--surface-light); border-radius: var(--radius-lg); border: 1px solid var(--border);">
-            <img src="{{ url_for('static', filename='confusion_matrix.svg') }}" alt="Matriz de Confusión" style="width: 42.5%; display: block;">
-          </div>
-          <p style="margin-top: 16px; color: var(--text-muted); font-size: 13px;">
-            La matriz muestra la distribución de predicciones correctas e incorrectas del modelo en el conjunto de prueba.
-          </p>
-          <ul style="margin-top: 16px;">
-            <li><strong style="color: #00a86b;">Verdaderos Positivos (TP):</strong> Fracturas correctamente detectadas (847 casos, 87%).</li>
-            <li><strong style="color: #d32f2f;">Falsos Negativos (FN):</strong> Fracturas no detectadas (128 casos, 13%) - críticos para evitar.</li>
-            <li><strong style="color: #ff9800;">Falsos Positivos (FP):</strong> Radiografías normales clasificadas como fracturadas (89 casos, 10%).</li>
-            <li><strong style="color: #00a86b;">Verdaderos Negativos (TN):</strong> Radiografías normales correctamente clasificadas (801 casos, 90%).</li>
-          </ul>
-
-          <h3 style="margin-top: 32px;">Gráficas de Entrenamiento</h3>
-          <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 24px;">
-            Las siguientes gráficas muestran la evolución del modelo durante el entrenamiento. Se visualizan dos métricas clave: la <strong>pérdida</strong> (loss), que mide el error de predicción, y la <strong>precisión</strong> (accuracy), que indica el porcentaje de predicciones correctas.
-          </p>
+          <h3 style="margin-bottom: 24px;">Métricas de Entrenamiento: Precisión y Pérdida</h3>
 
           <!-- CODO -->
           <div style="margin-bottom: 40px; padding: 20px; background: var(--surface-light); border-radius: var(--radius-lg); border-left: 4px solid #0f67a6;">
@@ -277,28 +234,14 @@
           </div>
 
           <div style="margin-top: 32px; padding: 16px; background: rgba(15, 103, 166, 0.1); border-left: 4px solid #0f67a6; border-radius: var(--radius-md);">
-            <h4 style="color: #1a7db8; margin-bottom: 12px; font-size: 14px;">Indicadores de Rendimiento</h4>
+            <h4 style="color: #1a7db8; margin-bottom: 12px; font-size: 14px;">Interpretación de las Gráficas</h4>
             <ul style="margin: 0; padding-left: 20px; font-size: 13px;">
               <li><strong>Convergencia:</strong> Estabilización de curvas indica que el modelo ha aprendido completamente el patrón de datos.</li>
-              <li><strong>Brecha Entrenamiento-Validación:</strong> Una diferencia pequeña entre curvas de entrenamiento y validación indica buena generalización (bajo overfitting).</li>
-              <li><strong>Evolución de Loss:</strong> Disminución suave y consistente muestra aprendizaje progresivo sin oscilaciones abruptas.</li>
-              <li><strong>Plateau de Accuracy:</strong> Cuando la precisión se estabiliza, hemos alcanzado el máximo aprendizaje posible con la arquitectura actual.</li>
+              <li><strong>Curva de Pérdida:</strong> Disminución progresiva del error indica aprendizaje efectivo durante el entrenamiento.</li>
+              <li><strong>Curva de Precisión:</strong> Aumento gradual demuestra que el modelo mejora su capacidad de clasificación correcta con cada época.</li>
+              <li><strong>Plateau:</strong> Cuando las curvas se estabilizan, el modelo ha alcanzado su máxima capacidad de aprendizaje.</li>
             </ul>
           </div>
-
-          <h3>Validación Clínica</h3>
-          <ul>
-            <li>Comparación de predicciones del modelo con diagnósticos de médicos especialistas.</li>
-            <li>Acuerdo inter-observador evaluado mediante coeficiente Kappa.</li>
-            <li>Identificación de casos límite y mejora de umbrales de decisión.</li>
-          </ul>
-
-          <h3>Conclusiones de Evaluación</h3>
-          <ul>
-            <li>El modelo cumple con estándares de confiabilidad para asistencia diagnóstica.</li>
-            <li>Desempeño consistente en el conjunto de prueba independiente.</li>
-            <li>Apto para integración en entorno clínico como herramienta de segundo evaluador.</li>
-          </ul>
         </div>
 
         <!-- TAB CONTENT: FASE 5 -->
