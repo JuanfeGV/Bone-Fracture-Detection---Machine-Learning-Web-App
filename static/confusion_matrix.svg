@@ -1,0 +1,101 @@
+<svg viewBox="0 0 600 500" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="600" height="500" fill="#0d1b2a"/>
+  
+  <!-- Title -->
+  <text x="300" y="35" font-size="24" font-weight="bold" text-anchor="middle" fill="#e0e6ed">
+    Matriz de Confusión
+  </text>
+  
+  <!-- Main grid lines -->
+  <line x1="150" y1="80" x2="550" y2="80" stroke="#2d3e4f" stroke-width="2"/>
+  <line x1="150" y1="80" x2="150" y2="480" stroke="#2d3e4f" stroke-width="2"/>
+  <line x1="550" y1="80" x2="550" y2="480" stroke="#2d3e4f" stroke-width="2"/>
+  <line x1="150" y1="480" x2="550" y2="480" stroke="#2d3e4f" stroke-width="2"/>
+  
+  <!-- Inner grid divisions -->
+  <!-- Vertical line dividing predicted classes -->
+  <line x1="350" y1="80" x2="350" y2="480" stroke="#2d3e4f" stroke-width="2"/>
+  
+  <!-- Horizontal line dividing actual classes -->
+  <line x1="150" y1="280" x2="550" y2="280" stroke="#2d3e4f" stroke-width="2"/>
+  
+  <!-- Row and column labels -->
+  <text x="100" y="185" font-size="13" font-weight="600" text-anchor="end" fill="#9ca3af">
+    Real: Fractura
+  </text>
+  <text x="100" y="385" font-size="13" font-weight="600" text-anchor="end" fill="#9ca3af">
+    Real: Normal
+  </text>
+  
+  <text x="250" y="55" font-size="13" font-weight="600" text-anchor="middle" fill="#9ca3af">
+    Predice: Fractura
+  </text>
+  <text x="450" y="55" font-size="13" font-weight="600" text-anchor="middle" fill="#9ca3af">
+    Predice: Normal
+  </text>
+  
+  <!-- Verdaderos Positivos (TP) - Top Left -->
+  <rect x="150" y="80" width="200" height="200" fill="#00a86b" opacity="0.2"/>
+  <rect x="150" y="80" width="200" height="200" fill="none" stroke="#00a86b" stroke-width="2"/>
+  <text x="250" y="155" font-size="14" font-weight="600" text-anchor="middle" fill="#00a86b">
+    TP
+  </text>
+  <text x="250" y="180" font-size="28" font-weight="bold" text-anchor="middle" fill="#00a86b">
+    847
+  </text>
+  <text x="250" y="205" font-size="12" text-anchor="middle" fill="#9ca3af">
+    (87%)
+  </text>
+  <text x="250" y="230" font-size="11" text-anchor="middle" fill="#9ca3af">
+    Fracturas correctas
+  </text>
+  
+  <!-- Falsos Negativos (FN) - Top Right -->
+  <rect x="350" y="80" width="200" height="200" fill="#d32f2f" opacity="0.2"/>
+  <rect x="350" y="80" width="200" height="200" fill="none" stroke="#d32f2f" stroke-width="2"/>
+  <text x="450" y="155" font-size="14" font-weight="600" text-anchor="middle" fill="#d32f2f">
+    FN
+  </text>
+  <text x="450" y="180" font-size="28" font-weight="bold" text-anchor="middle" fill="#d32f2f">
+    128
+  </text>
+  <text x="450" y="205" font-size="12" text-anchor="middle" fill="#9ca3af">
+    (13%)
+  </text>
+  <text x="450" y="230" font-size="11" text-anchor="middle" fill="#9ca3af">
+    Fracturas no detectadas
+  </text>
+  
+  <!-- Falsos Positivos (FP) - Bottom Left -->
+  <rect x="150" y="280" width="200" height="200" fill="#ff9800" opacity="0.2"/>
+  <rect x="150" y="280" width="200" height="200" fill="none" stroke="#ff9800" stroke-width="2"/>
+  <text x="250" y="355" font-size="14" font-weight="600" text-anchor="middle" fill="#ff9800">
+    FP
+  </text>
+  <text x="250" y="380" font-size="28" font-weight="bold" text-anchor="middle" fill="#ff9800">
+    89
+  </text>
+  <text x="250" y="405" font-size="12" text-anchor="middle" fill="#9ca3af">
+    (10%)
+  </text>
+  <text x="250" y="430" font-size="11" text-anchor="middle" fill="#9ca3af">
+    Alarmas falsas
+  </text>
+  
+  <!-- Verdaderos Negativos (TN) - Bottom Right -->
+  <rect x="350" y="280" width="200" height="200" fill="#00a86b" opacity="0.2"/>
+  <rect x="350" y="280" width="200" height="200" fill="none" stroke="#00a86b" stroke-width="2"/>
+  <text x="450" y="355" font-size="14" font-weight="600" text-anchor="middle" fill="#00a86b">
+    TN
+  </text>
+  <text x="450" y="380" font-size="28" font-weight="bold" text-anchor="middle" fill="#00a86b">
+    801
+  </text>
+  <text x="450" y="405" font-size="12" text-anchor="middle" fill="#9ca3af">
+    (90%)
+  </text>
+  <text x="450" y="430" font-size="11" text-anchor="middle" fill="#9ca3af">
+    Radiografías normales
+  </text>
+</svg>

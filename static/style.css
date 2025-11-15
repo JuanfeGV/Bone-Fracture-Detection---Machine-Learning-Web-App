@@ -461,6 +461,19 @@ body {
   line-height: 1.6;
 }
 
+.tab-content a {
+  color: var(--primary-light);
+  text-decoration: none;
+  font-weight: 600;
+  transition: var(--transition);
+  border-bottom: 1px solid transparent;
+}
+
+.tab-content a:hover {
+  color: var(--primary);
+  border-bottom-color: var(--primary-light);
+}
+
 .btn-goto-analisis {
   margin-top: 32px;
   display: inline-block;
@@ -851,4 +864,18 @@ body {
 
 .visible {
   display: block;
+}
+
+/* ═══════════════════════════════════════ ANÁLISIS PAGE ═══════════════════════════════════════ */
+
+body.analisis-page .tab-content {
+  display: none !important;
+}
+
+body.analisis-page .tab-nav {
+  display: none !important;
+}
+
+body.analisis-page .sidebar-menu li:not(:last-child) {
+  display: none !important;
 }

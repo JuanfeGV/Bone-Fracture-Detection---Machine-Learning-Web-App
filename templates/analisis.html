@@ -6,7 +6,7 @@
     <title>Análisis de Imágenes - Detección de Fracturas</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   </head>
-  <body>
+  <body class="analisis-page">
     <div class="main-layout">
       <!-- SIDEBAR -->
       <aside class="sidebar">
@@ -118,28 +118,36 @@
       const fileInput = document.getElementById('imagen');
       const fileLabel = document.querySelector('.file-input-label');
 
-      fileLabel.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        fileLabel.style.borderColor = 'var(--primary)';
-        fileLabel.style.background = 'linear-gradient(135deg, rgba(26, 125, 184, 0.15) 0%, rgba(15, 103, 166, 0.15) 100%)';
-      });
+      if (fileLabel) {
+        fileLabel.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          fileLabel.style.borderColor = 'var(--primary)';
+          fileLabel.style.background = 'linear-gradient(135deg, rgba(26, 125, 184, 0.15) 0%, rgba(15, 103, 166, 0.15) 100%)';
+        });
 
-      fileLabel.addEventListener('dragleave', () => {
-        fileLabel.style.borderColor = 'var(--primary-light)';
-        fileLabel.style.background = 'linear-gradient(135deg, rgba(26, 125, 184, 0.05) 0%, rgba(15, 103, 166, 0.05) 100%)';
-      });
+        fileLabel.addEventListener('dragleave', () => {
+          fileLabel.style.borderColor = 'var(--primary-light)';
+          fileLabel.style.background = 'linear-gradient(135deg, rgba(26, 125, 184, 0.05) 0%, rgba(15, 103, 166, 0.05) 100%)';
+        });
 
-      fileLabel.addEventListener('drop', (e) => {
-        e.preventDefault();
-        fileInput.files = e.dataTransfer.files;
-        fileLabel.style.borderColor = 'var(--primary-light)';
-        fileLabel.style.background = 'linear-gradient(135deg, rgba(26, 125, 184, 0.05) 0%, rgba(15, 103, 166, 0.05) 100%)';
-      });
+        fileLabel.addEventListener('drop', (e) => {
+          e.preventDefault();
+          fileInput.files = e.dataTransfer.files;
+          fileLabel.style.borderColor = 'var(--primary-light)';
+          fileLabel.style.background = 'linear-gradient(135deg, rgba(26, 125, 184, 0.05) 0%, rgba(15, 103, 166, 0.05) 100%)';
+        });
+      }
 
       // Show results when form is submitted
-      document.querySelector('form').addEventListener('submit', () => {
-        document.querySelector('.results-section').classList.add('active');
-      });
+      const form = document.querySelector('form');
+      if (form) {
+        form.addEventListener('submit', () => {
+          const resultsSection = document.querySelector('.results-section');
+          if (resultsSection) {
+            resultsSection.classList.add('active');
+          }
+        });
+      }
     </script>
   </body>
 </html>
